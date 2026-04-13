@@ -3,35 +3,63 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { RefreshCw, MapPin, Clock, CloudSun, Utensils, History } from 'lucide-react';
 import { format } from 'date-fns';
 
-// ------------------- MOCK DATA -------------------
-const MENU_DB = [
-  { id: 1, name: '김치찌개', category: '한식', weather: ['비', '흐림', '맑음'], type: ['점심', '저녁'], image: 'https://images.unsplash.com/photo-1580651315530-69c8e0026377?q=80&w=800&auto=format&fit=crop' },
-  { id: 2, name: '돈까스', category: '일식', weather: ['맑음', '흐림'], type: ['점심', '저녁'], image: 'https://images.unsplash.com/photo-1595295333158-4742f28fbd85?q=80&w=800&auto=format&fit=crop' },
-  { id: 3, name: '짜장면', category: '중식', weather: ['비', '흐림', '맑음'], type: ['점심', '저녁'], image: 'https://images.unsplash.com/photo-1552611052-33e04de081de?q=80&w=800&auto=format&fit=crop' },
-  { id: 4, name: '초밥', category: '일식', weather: ['맑음'], type: ['점심', '저녁'], image: 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?q=80&w=800&auto=format&fit=crop' },
-  { id: 5, name: '제육볶음', category: '한식', weather: ['맑음', '흐림'], type: ['점심', '저녁'], image: 'https://images.unsplash.com/photo-1628191295246-88022b7a4253?q=80&w=800&auto=format&fit=crop' },
-  { id: 6, name: '햄버거', category: '양식', weather: ['맑음', '흐림'], type: ['점심'], image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=800&auto=format&fit=crop' },
-  { id: 7, name: '파스타', category: '양식', weather: ['맑음', '흐림', '비'], type: ['점심', '저녁'], image: 'https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?q=80&w=800&auto=format&fit=crop' },
-  { id: 8, name: '마라탕', category: '중식', weather: ['비', '흐림'], type: ['점심', '저녁'], image: 'https://images.unsplash.com/photo-1555126634-323283e090fa?q=80&w=800&auto=format&fit=crop' },
-  { id: 9, name: '국밥', category: '한식', weather: ['비', '흐림', '눈'], type: ['점심', '저녁'], image: 'https://plus.unsplash.com/premium_photo-1661600135892-06900f0aa125?q=80&w=800&auto=format&fit=crop' },
-  { id: 10, name: '치킨', category: '야식', weather: ['맑음', '비', '흐림'], type: ['저녁'], image: 'https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?q=80&w=800&auto=format&fit=crop' },
-];
+const WEATHER_CONFIG = {
+  API_KEY: "1",
+  PROXY_URL: "https://YOUR_WORKER_SUBDOMAIN.workers.dev/weather",
+  LAT: 37.380,
+  LON: 126.803,
+  CITY_NAME: "Siheung"
+};
 
-const WEATHER_MOCK = ['맑음', '흐림', '비'];
+const rawData = {
+  '한식': ['김치찌개', '된장찌개', '제육볶음', '비빔밥', '불고기', '육개장', '수육국밥', '쌈밥', '부대찌개', '닭갈비'],
+  '일식': ['초밥', '돈카츠', '규동(소고기덮밥)', '사케동(연어덮밥)', '라멘', '우동', '소바', '가츠동', '텐동'],
+  '양식': ['마르게리따 피자', '까르보나라', '알리오올리오', '치즈버거', '스테이크', '샐러드 파스타', '리조또'],
+  '중식': ['짜장면', '짬뽕', '볶음밥', '탕수육', '마라탕', '꿔바로우', '마파두부', '토마토 달걀 볶음'],
+  '가벼운 한 끼': ['떡볶이', '모둠 튀김', '샌드위치', '샐러드', '에그 드랍', '컵밥', '닭강정', '쌀국수']
+};
+
+const MENU_DB = [];
+let idCounter = 1;
+for (const [category, menus] of Object.entries(rawData)) {
+  for (const name of menus) {
+    MENU_DB.push({
+      id: idCounter++,
+      name,
+      category,
+      type: ['점심', '저녁']
+    });
+  }
+}
 
 export default function App() {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [mealType, setMealType] = useState('점심'); // '점심' | '저녁'
-  const [weather] = useState(WEATHER_MOCK[Math.floor(Math.random() * WEATHER_MOCK.length)]);
+  const [weather, setWeather] = useState('날씨 확인 중...');
   
   const [selectedCategory, setSelectedCategory] = useState('전체');
-  const categories = ['전체', '한식', '중식', '일식', '양식'];
+  const categories = ['전체', '한식', '일식', '양식', '중식', '가벼운 한 끼'];
 
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [history, setHistory] = useState([]);
 
   useEffect(() => {
+    const fetchWeather = async () => {
+      try {
+        if (WEATHER_CONFIG.PROXY_URL.includes("YOUR_WORKER")) {
+          setWeather('맑음'); // Fallback since proxy isn't setup
+        } else {
+          const res = await fetch(`${WEATHER_CONFIG.PROXY_URL}?lat=${WEATHER_CONFIG.LAT}&lon=${WEATHER_CONFIG.LON}`);
+          const data = await res.json();
+          setWeather(data.weather?.[0]?.description || '맑음');
+        }
+      } catch (e) {
+        setWeather('맑음');
+      }
+    };
+    fetchWeather();
+
     const timer = setInterval(() => setCurrentTime(new Date()), 60000);
     const hour = currentTime.getHours();
     if (hour >= 15 || hour < 4) {
@@ -168,12 +196,7 @@ export default function App() {
                 transition={{ type: "spring", stiffness: 300, damping: 20 }}
                 className="bg-card w-full rounded-[24px] shadow-sm overflow-hidden"
               >
-                <div className="h-48 w-full bg-gray-200 relative">
-                  <img 
-                    src={result.image} 
-                    alt={result.name}
-                    className="w-full h-full object-cover"
-                  />
+                <div className="h-48 w-full bg-[#111111] relative">
                   <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-lg text-sm font-bold text-textMain shadow-sm">
                     {result.category}
                   </div>
@@ -232,7 +255,7 @@ export default function App() {
                   key={`${item.id}-${idx}`} 
                   className="bg-card w-32 shrink-0 rounded-[16px] shadow-sm overflow-hidden border border-gray-100"
                 >
-                  <img src={item.image} alt={item.name} className="w-full h-20 object-cover" />
+                  <div className="w-full h-20 bg-[#111111]" />
                   <div className="p-3">
                     <p className="text-xs text-textSub font-medium mb-0.5">{item.category}</p>
                     <p className="font-bold text-[15px]">{item.name}</p>
