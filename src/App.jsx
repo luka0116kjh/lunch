@@ -34,10 +34,13 @@ for (const [category, menus] of Object.entries(rawData)) {
 
 export default function App() {
   const [currentTime, setCurrentTime] = useState(new Date());
-  const [mealType, setMealType] = useState('점심'); // '점심' | '저녁'
   const [weather, setWeather] = useState('날씨 확인 중...');
-  
   const [selectedCategory, setSelectedCategory] = useState('전체');
+  
+  // Derive mealType from currentTime
+  const hour = currentTime.getHours();
+  const mealType = (hour >= 15 || hour < 4) ? '저녁' : '점심';
+
   const categories = ['전체', '한식', '일식', '양식', '중식', '가벼운 한 끼'];
 
   const [isLoading, setIsLoading] = useState(false);
@@ -54,21 +57,15 @@ export default function App() {
           const data = await res.json();
           setWeather(data.weather?.[0]?.description || '맑음');
         }
-      } catch (e) {
+      } catch {
         setWeather('맑음');
       }
     };
     fetchWeather();
 
     const timer = setInterval(() => setCurrentTime(new Date()), 60000);
-    const hour = currentTime.getHours();
-    if (hour >= 15 || hour < 4) {
-      setMealType('저녁');
-    } else {
-      setMealType('점심');
-    }
     return () => clearInterval(timer);
-  }, [currentTime]);
+  }, []); // Only on mount or when weather needs refresh
 
   const handleRecommend = () => {
     setIsLoading(true);

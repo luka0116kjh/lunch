@@ -2,6 +2,7 @@
   "name": "lunch",
   "private": true,
   "version": "0.0.0",
+  "homepage": "https://luka0116kjh.github.io/lunch",
   "type": "module",
   "scripts": {
     "dev": "vite",

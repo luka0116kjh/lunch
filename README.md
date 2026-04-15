@@ -1,16 +1,36 @@
-# React + Vite
+# 🍱 오늘 뭐 먹지? (Smart Lunch Picker)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+오늘 점심, 저녁 메뉴가 고민될 때 버튼 한 번으로 해결해주는 스마트 식사 추천 서비스입니다.
+Toss 스타일의 깔끔하고 직관적인 UI를 제공합니다.
 
-Currently, two official plugins are available:
+## ✨ 주요 기능
+- **스마트 메뉴 추천**: 카테고리별로 랜덤하게 메뉴를 추천해줍니다.
+- **최근 추천 기록**: 내가 이전에 추천받은 메뉴들을 확인할 수 있습니다.
+- **날씨 및 시간**: 실시간 시간과 날씨 정보를 바탕으로 최적의 식사 타입을 안내합니다. (점심/저녁)
+- **맛집 검색**: 추천받은 메뉴의 주변 맛집을 바로 검색할 수 있는 기능을 제공합니다.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 🛠 기술 스택
+- **Frontend**: React 19, Vite
+- **Styling**: Tailwind CSS v4, Framer Motion
+- **Icons**: Lucide React
+- **Deployment**: GitHub Pages
 
-## React Compiler
+## 🚀 시작하기
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 설치
+```bash
+npm install
+```
 
-## Expanding the ESLint configuration
+### 로컬 실행
+```bash
+npm run dev
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### 배포
+```bash
+npm run deploy
+```
+
+## 📝 라이선스
+MIT License
