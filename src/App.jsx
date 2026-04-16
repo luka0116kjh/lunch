@@ -11,11 +11,17 @@ const WEATHER_CONFIG = {
   CITY_NAME: "Seoul"
 };
 
+const DUST_CONFIG = {
+  API_KEY: import.meta.env.VITE_DUST_API_KEY,
+  STATION_NAME: '강남구'
+};
+
 // Remote data handling via recipeService.js
 
 export default function App() {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [weather, setWeather] = useState('날씨 확인 중...');
+  const [dust, setDust] = useState('미세먼지 확인 중...');
   const [selectedCategory, setSelectedCategory] = useState('전체');
 
   // Derive mealType from currentTime
@@ -40,7 +46,6 @@ export default function App() {
 
         const res = await fetch(url);
         
-        // 응답이 성공적이지 않은 경우(예: 401 에러) 명시적으로 에러를 던져 catch 블록으로 보냅니다.
         if (!res.ok) {
           throw new Error(`Weather API Error: ${res.status}`);
         }
@@ -54,10 +59,41 @@ export default function App() {
         }
       } catch (err) {
         console.error("Weather fetch failed:", err);
-        setWeather('맑음'); // 에러 발생 시 '맑음'으로 처리하여 무한 대기 방지
+        setWeather('맑음');
       }
     };
+
+    const fetchDust = async () => {
+      try {
+        const url = `https://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty?serviceKey=${DUST_CONFIG.API_KEY}&returnType=json&numOfRows=100&pageNo=1&sidoName=서울&ver=1.0`;
+        const res = await fetch(url);
+        if (!res.ok) throw new Error('Dust API Error');
+        const data = await res.json();
+        const items = data.response?.body?.items;
+        if (items) {
+          const stationData = items.find(item => item.stationName === DUST_CONFIG.STATION_NAME);
+          if (stationData) {
+            const val = stationData.pm10Value;
+            let grade = '보통';
+            const gradeNum = parseInt(stationData.pm10Grade);
+            if (gradeNum === 1) grade = '좋음';
+            else if (gradeNum === 2) grade = '보통';
+            else if (gradeNum === 3) grade = '나쁨';
+            else if (gradeNum === 4) grade = '매우나쁨';
+            
+            setDust(`${grade} (${val}㎍/㎥)`);
+          } else {
+            setDust('정보 없음');
+          }
+        }
+      } catch (err) {
+        console.error("Dust fetch failed:", err);
+        setDust('정보 없음');
+      }
+    };
+
     fetchWeather();
+    fetchDust();
 
     const timer = setInterval(() => setCurrentTime(new Date()), 60000);
     return () => clearInterval(timer);
@@ -111,6 +147,16 @@ export default function App() {
                 <span className="flex items-center bg-white premium-shadow px-3.5 py-1.5 rounded-full border border-gray-50">
                   <CloudSun className="w-3.5 h-3.5 mr-1.5 text-orange-400" />
                   {weather}
+                </span>
+                <span className="flex items-center bg-white premium-shadow px-3.5 py-1.5 rounded-full border border-gray-50 ml-2">
+                  <div className={`w-1.5 h-1.5 rounded-full mr-2 ${
+                    dust.includes('좋음') ? 'bg-blue-400' : 
+                    dust.includes('보통') ? 'bg-green-400' : 
+                    dust.includes('나쁨') ? 'bg-orange-400' : 
+                    dust.includes('매우나쁨') ? 'bg-red-400' : 'bg-gray-300'
+                  }`} />
+                  <span className="text-[10px] text-textSub mr-1">미세</span>
+                  {dust}
                 </span>
               </div>
             </div>
