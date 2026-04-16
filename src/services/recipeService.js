@@ -1,9 +1,3 @@
-/**
- * Simplified Menu Service
- * Removed complex API calls and filtering to improve performance.
- * Uses a curated local list of menus for instant recommendations.
- */
-
 const MENU_DATA = {
   '한식': [
     { id: 'kr1', name: '김치찌개', category: '한식' },
@@ -71,8 +65,7 @@ const MENU_DATA = {
 };
 
 export const getRecommendedRecipe = async (category = '전체', excludeIds = []) => {
-  // Artificial delay to keep the "thinking" animation effect if desired, 
-  // but significantly shorter than the network request.
+
   await new Promise(resolve => setTimeout(resolve, 600));
 
   let pool = [];
@@ -82,12 +75,9 @@ export const getRecommendedRecipe = async (category = '전체', excludeIds = [])
     pool = MENU_DATA[category] || [];
   }
 
-  // Filter out recently recommended to avoid duplicates
   const filteredPool = pool.filter(item => !excludeIds.includes(item.id));
-  
-  // If all are excluded, reset and use original pool
   const finalPool = filteredPool.length > 0 ? filteredPool : pool;
-  
+
   if (finalPool.length === 0) return { id: '0', name: '아무거나!', category: '기타' };
 
   const randomIndex = Math.floor(Math.random() * finalPool.length);
