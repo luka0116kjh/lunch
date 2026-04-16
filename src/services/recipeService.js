@@ -1,5 +1,6 @@
-const API_KEY = import.meta.env.VITE_RECIPE_API_KEY;
+const API_KEY = import.meta.env.VITE_RECIPE_API_KEY || "";
 const BASE_URL = `https://openapi.foodsafetykorea.go.kr/api/${API_KEY}/COOKRCP01/json`;
+const PROXY_URL = "https://api.allorigins.win/raw?url=";
 
 /**
  * Category mapping for better matching
@@ -20,8 +21,8 @@ const CATEGORY_MAP = {
  */
 export const fetchRecipes = async (start = 1, end = 100) => {
   try {
-    // Note: Using https if possible, or http if necessary. Food Safety portal usually supports both.
-    const response = await fetch(`${BASE_URL}/${start}/${end}`);
+    const targetUrl = `${BASE_URL}/${start}/${end}`;
+    const response = await fetch(PROXY_URL + encodeURIComponent(targetUrl));
     const data = await response.json();
     
     if (data.COOKRCP01 && data.COOKRCP01.row) {
