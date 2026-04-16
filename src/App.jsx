@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { RefreshCw, MapPin, Clock, CloudSun, Utensils, History } from 'lucide-react';
-import { format } from 'date-fns';
 
 const WEATHER_CONFIG = {
   API_KEY: "1",
@@ -37,27 +36,28 @@ export default function App() {
   const [weather, setWeather] = useState('날씨 확인 중...');
   const [selectedCategory, setSelectedCategory] = useState('전체');
   
+  const [isLoading, setIsLoading] = useState(false);
+  const [result, setResult] = useState(null);
+  const [history, setHistory] = useState([]);
+
   // Derive mealType from currentTime
   const hour = currentTime.getHours();
   const mealType = (hour >= 15 || hour < 4) ? '저녁' : '점심';
 
   const categories = ['전체', '한식', '일식', '양식', '중식', '가벼운 한 끼'];
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [result, setResult] = useState(null);
-  const [history, setHistory] = useState([]);
-
   useEffect(() => {
     const fetchWeather = async () => {
       try {
-        if (WEATHER_CONFIG.PROXY_URL.includes("YOUR_WORKER")) {
-          setWeather('맑음'); // Fallback since proxy isn't setup
-        } else {
+        if (WEATHER_CONFIG.PROXY_URL && !WEATHER_CONFIG.PROXY_URL.includes("YOUR_WORKER")) {
           const res = await fetch(`${WEATHER_CONFIG.PROXY_URL}?lat=${WEATHER_CONFIG.LAT}&lon=${WEATHER_CONFIG.LON}`);
           const data = await res.json();
           setWeather(data.weather?.[0]?.description || '맑음');
+        } else {
+          setWeather('맑음');
         }
-      } catch {
+      } catch (err) {
+        console.error("Weather fetch failed:", err);
         setWeather('맑음');
       }
     };
@@ -65,13 +65,12 @@ export default function App() {
 
     const timer = setInterval(() => setCurrentTime(new Date()), 60000);
     return () => clearInterval(timer);
-  }, []); // Only on mount or when weather needs refresh
+  }, []);
 
   const handleRecommend = () => {
     setIsLoading(true);
     setResult(null);
 
-    // 긴장감을 주기 위한 최소 딜레이 (애니메이션과 함께)
     setTimeout(() => {
       let availableMenus = MENU_DB.filter(menu => menu.type.includes(mealType));
       
@@ -79,9 +78,8 @@ export default function App() {
         availableMenus = availableMenus.filter(menu => menu.category === selectedCategory);
       }
 
-      // 날씨에 맞는 메뉴에 약간의 가중치 부여 (간단 구현을 위해 완전히 랜덤)
       if (availableMenus.length === 0) {
-        availableMenus = MENU_DB.filter(menu => menu.type.includes(mealType)); // fallback
+        availableMenus = MENU_DB.filter(menu => menu.type.includes(mealType));
       }
 
       const randomMenu = availableMenus[Math.floor(Math.random() * availableMenus.length)];
@@ -92,7 +90,7 @@ export default function App() {
         return newHistory;
       });
       setIsLoading(false);
-    }, 1200); // 1.2초의 긴장감
+    }, 1200);
   };
 
   const openMap = (menuName) => {
@@ -188,30 +186,23 @@ export default function App() {
             {result && !isLoading && (
               <motion.div
                 key="result"
-                initial={{ opacity: 0, y: 30, scale: 0.95 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                className="bg-card w-full rounded-[24px] shadow-sm overflow-hidden"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                className="bg-card w-full rounded-[24px] premium-shadow overflow-hidden border border-gray-100 p-8"
               >
-                <div className="h-48 w-full bg-[#111111] relative overflow-hidden grain-bg flex items-center justify-center">
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10" />
-                  <Utensils className="w-20 h-20 text-white/5 relative z-0" />
-                  <div className="absolute top-4 left-4 bg-white/95 backdrop-blur-md px-3.5 py-1.5 rounded-xl text-xs font-bold text-textMain shadow-lg z-20 border border-white/20">
+                <div className="flex flex-col items-center text-center">
+                  <div className="bg-primary/10 text-primary px-3.5 py-1 rounded-full text-xs font-bold mb-5 tracking-tight">
                     {result.category}
                   </div>
-                </div>
-                <div className="p-6">
-                  <div className="flex justify-between items-end mb-4">
-                    <div>
-                      <p className="text-textSub text-sm font-semibold mb-1">추천된 {mealType} 메뉴는</p>
-                      <h2 className="text-3xl font-extrabold tracking-tight">{result.name}</h2>
-                    </div>
-                  </div>
+                  <p className="text-textSub text-[15px] font-semibold mb-2">오늘 추천하는 {mealType} 메뉴는</p>
+                  <h2 className="text-4xl font-extrabold tracking-tight text-textMain mb-8">{result.name}</h2>
+                  
                   <button 
                     onClick={() => openMap(result.name)}
-                    className="w-full bg-gray-100 hover:bg-gray-200 text-textMain font-bold py-4 rounded-xl flex items-center justify-center transition-colors active:scale-[0.98] mt-2"
+                    className="w-full bg-[#F2F4F6] hover:bg-gray-200 text-textMain font-bold py-4 rounded-2xl flex items-center justify-center transition-all active:scale-[0.98]"
                   >
-                    <MapPin className="w-5 h-5 mr-2" />
+                    <MapPin className="w-5 h-5 mr-2 text-primary" />
                     근처 맛집 보기
                   </button>
                 </div>
@@ -252,15 +243,10 @@ export default function App() {
               {history.map((item, idx) => (
                 <div 
                   key={`${item.id}-${idx}`} 
-                  className="bg-card w-32 shrink-0 rounded-[16px] shadow-sm overflow-hidden border border-gray-100"
+                  className="bg-card shrink-0 px-5 py-4 rounded-[20px] shadow-sm border border-gray-100 min-w-[140px]"
                 >
-                  <div className="w-full h-20 bg-[#111111] grain-bg flex items-center justify-center">
-                    <Utensils className="w-6 h-6 text-white/5" />
-                  </div>
-                  <div className="p-3">
-                    <p className="text-[10px] text-textSub font-bold uppercase tracking-wider mb-0.5">{item.category}</p>
-                    <p className="font-bold text-[14px] truncate">{item.name}</p>
-                  </div>
+                  <p className="text-[10px] text-primary font-bold uppercase tracking-wider mb-1">{item.category}</p>
+                  <p className="font-bold text-[15px] text-textMain truncate">{item.name}</p>
                 </div>
               ))}
             </div>
