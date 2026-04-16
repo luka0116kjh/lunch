@@ -136,7 +136,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-background flex justify-center text-textMain selection:bg-primary selection:text-white">
-      <div className="w-full max-w-md bg-transparent p-5 flex flex-col pt-12 pb-20 relative">
+      <div className="w-full max-w-md bg-transparent p-4 flex flex-col pt-8 pb-16 relative">
 
         {/* Header Section */}
         <header className="mb-8">
@@ -146,34 +146,34 @@ export default function App() {
             transition={{ duration: 0.5 }}
           >
             <div className="flex flex-col space-y-2 mb-4">
-              <div className="flex items-center space-x-2 text-textSub text-xs font-semibold">
-                <span className="flex items-center bg-white premium-shadow px-3.5 py-1.5 rounded-full border border-gray-50">
-                  <Clock className="w-3.5 h-3.5 mr-1.5 text-primary" />
-                  {currentTime.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'short' })}
-                  <span className="mx-2 text-gray-200">|</span>
+              <div className="flex items-center space-x-1.5 text-textSub text-[11px] font-semibold flex-wrap gap-y-2">
+                <span className="flex items-center bg-white premium-shadow px-2.5 py-1 rounded-full border border-gray-50">
+                  <Clock className="w-3 h-3 mr-1 text-primary" />
+                  {currentTime.toLocaleDateString('ko-KR', { year: '2-digit', month: 'numeric', day: 'numeric', weekday: 'short' })}
+                  <span className="mx-1.5 text-gray-200">|</span>
                   {currentTime.toLocaleTimeString('ko-KR', { hour: 'numeric', minute: '2-digit', hour12: true })}
                 </span>
-                <span className="flex items-center bg-white premium-shadow px-3.5 py-1.5 rounded-full border border-gray-50">
-                  <CloudSun className="w-3.5 h-3.5 mr-1.5 text-orange-400" />
+                <span className="flex items-center bg-white premium-shadow px-2.5 py-1 rounded-full border border-gray-50">
+                  <CloudSun className="w-3 h-3 mr-1 text-orange-400" />
                   {weather}
                 </span>
-                <span className="flex items-center bg-white premium-shadow px-3.5 py-1.5 rounded-full border border-gray-50 ml-2">
-                  <div className={`w-1.5 h-1.5 rounded-full mr-2 ${
+                <span className="flex items-center bg-white premium-shadow px-2.5 py-1 rounded-full border border-gray-50 ml-1.5">
+                  <div className={`w-1.5 h-1.5 rounded-full mr-1.5 ${
                     dust.includes('좋음') ? 'bg-blue-400' : 
                     dust.includes('보통') ? 'bg-green-400' : 
                     dust.includes('나쁨') ? 'bg-orange-400' : 
                     dust.includes('매우나쁨') ? 'bg-red-400' : 'bg-gray-300'
                   }`} />
-                  <span className="text-xs text-textSub mr-1">미세</span>
-                  {dust}
+                  <span className="text-[10px] text-textSub mr-1">미세</span>
+                  {dust.split(' ')[0]}
                 </span>
               </div>
             </div>
-            <h1 className="text-3xl font-bold leading-tight tracking-tight">
+            <h1 className="text-2xl font-bold leading-tight tracking-tight">
               오늘 {mealType}, <br />
               고민하지 마세요.
             </h1>
-            <p className="mt-3 text-textSub font-medium">최적의 식사를 추천해드릴게요.</p>
+            <p className="mt-2 text-textSub text-sm font-medium">최적의 식사를 추천해드릴게요.</p>
           </motion.div>
         </header>
 
@@ -188,7 +188,7 @@ export default function App() {
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
-              className={`px-4 py-2 rounded-xl whitespace-nowrap text-[15px] font-semibold transition-all duration-200 active:scale-95 ${selectedCategory === cat
+              className={`px-3 py-1.5 rounded-xl whitespace-nowrap text-sm font-semibold transition-all duration-200 active:scale-95 ${selectedCategory === cat
                 ? 'bg-textMain text-white'
                 : 'bg-card text-textSub hover:bg-gray-100 shadow-sm'
                 }`}
@@ -210,8 +210,8 @@ export default function App() {
                 exit={{ opacity: 0, scale: 0.95 }}
                 className="w-full flex-col items-center flex mt-10"
               >
-                <div className="w-40 h-40 bg-card rounded-full shadow-lg flex items-center justify-center mb-8">
-                  <Utensils className="w-16 h-16 text-gray-300" />
+                <div className="w-32 h-32 bg-card rounded-full shadow-lg flex items-center justify-center mb-6">
+                  <Utensils className="w-12 h-12 text-gray-300" />
                 </div>
               </motion.div>
             )}
@@ -241,18 +241,18 @@ export default function App() {
                 transition={{ type: "spring", stiffness: 300, damping: 25 }}
                 className="bg-card w-full rounded-[24px] premium-shadow overflow-hidden border border-gray-100"
               >
-                <div className="p-8">
+                <div className="p-6">
                   <div className="flex flex-col items-center text-center">
-                    <div className="bg-primary/10 text-primary px-3.5 py-1 rounded-full text-xs font-bold mb-5 tracking-tight">
+                    <div className="bg-primary/10 text-primary px-3 py-1 rounded-full text-[11px] font-bold mb-4 tracking-tight">
                       {result.category}
                     </div>
-                    <p className="text-textSub text-[15px] font-semibold mb-2">오늘 추천하는 메뉴는</p>
-                    <h2 className="text-3xl font-extrabold tracking-tight text-textMain mb-6">{result.name}</h2>
+                    <p className="text-textSub text-sm font-semibold mb-1.5">오늘 추천하는 메뉴는</p>
+                    <h2 className="text-2xl font-extrabold tracking-tight text-textMain mb-5">{result.name}</h2>
 
                     <div className="w-full">
                       <button
                         onClick={() => openMap(result.name)}
-                        className="w-full bg-[#111111] hover:bg-black text-white font-bold py-4 rounded-2xl flex items-center justify-center transition-all active:scale-[0.98] premium-shadow"
+                        className="w-full bg-[#111111] hover:bg-black text-white text-sm font-bold py-3.5 rounded-2xl flex items-center justify-center transition-all active:scale-[0.98] premium-shadow"
                       >
                         <MapPin className="w-4 h-4 mr-2 text-primary" />
                         식당 시황 확인하기
@@ -271,7 +271,7 @@ export default function App() {
           <button
             onClick={handleRecommend}
             disabled={isLoading}
-            className="w-full bg-primary text-white font-bold text-lg py-4 rounded-2xl shadow-[0_8px_24px_rgba(0,100,255,0.3)] hover:bg-blue-600 transition-all active:scale-[0.98] disabled:opacity-70 disabled:scale-100 pointer-events-auto flex justify-center items-center"
+            className="w-full bg-primary text-white font-bold text-base py-3.5 rounded-2xl shadow-[0_8px_24px_rgba(0,100,255,0.3)] hover:bg-blue-600 transition-all active:scale-[0.98] disabled:opacity-70 disabled:scale-100 pointer-events-auto flex justify-center items-center"
           >
             {isLoading ? '탐색 중...' : (
               <>
@@ -297,7 +297,7 @@ export default function App() {
               {history.map((item, idx) => (
                 <div
                   key={`${item.id}-${idx}`}
-                  className="bg-card w-32 shrink-0 rounded-[16px] shadow-sm overflow-hidden border border-gray-100"
+                  className="bg-card w-28 shrink-0 rounded-[16px] shadow-sm overflow-hidden border border-gray-100"
                 >
                   <div className="w-full h-1 bg-[#F2F4F6]" />
                   <div className="p-3">
