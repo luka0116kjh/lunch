@@ -62,7 +62,8 @@ export default function App() {
     setResult(null);
 
     try {
-      const recommended = await getRecommendedRecipe(selectedCategory);
+      const excludeIds = history.map(h => h.id);
+      const recommended = await getRecommendedRecipe(selectedCategory, excludeIds);
 
       if (recommended) {
         setResult(recommended);
