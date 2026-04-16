@@ -110,13 +110,13 @@ export default function App() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <div className="flex items-center space-x-2 text-textSub text-sm font-medium mb-3">
-              <span className="flex items-center bg-card shadow-sm px-3 py-1.5 rounded-full">
-                <Clock className="w-4 h-4 mr-1.5" />
-                {format(currentTime, 'a h:mm')}
+            <div className="flex items-center space-x-2 text-textSub text-xs font-semibold mb-4">
+              <span className="flex items-center bg-white premium-shadow px-3.5 py-1.5 rounded-full border border-gray-50">
+                <Clock className="w-3.5 h-3.5 mr-1.5 text-primary" />
+                {currentTime.toLocaleTimeString('ko-KR', { hour: 'numeric', minute: '2-digit', hour12: true })}
               </span>
-              <span className="flex items-center bg-card shadow-sm px-3 py-1.5 rounded-full">
-                <CloudSun className="w-4 h-4 mr-1.5" />
+              <span className="flex items-center bg-white premium-shadow px-3.5 py-1.5 rounded-full border border-gray-50">
+                <CloudSun className="w-3.5 h-3.5 mr-1.5 text-orange-400" />
                 {weather}
               </span>
             </div>
@@ -193,8 +193,10 @@ export default function App() {
                 transition={{ type: "spring", stiffness: 300, damping: 20 }}
                 className="bg-card w-full rounded-[24px] shadow-sm overflow-hidden"
               >
-                <div className="h-48 w-full bg-[#111111] relative">
-                  <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-lg text-sm font-bold text-textMain shadow-sm">
+                <div className="h-48 w-full bg-[#111111] relative overflow-hidden grain-bg flex items-center justify-center">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10" />
+                  <Utensils className="w-20 h-20 text-white/5 relative z-0" />
+                  <div className="absolute top-4 left-4 bg-white/95 backdrop-blur-md px-3.5 py-1.5 rounded-xl text-xs font-bold text-textMain shadow-lg z-20 border border-white/20">
                     {result.category}
                   </div>
                 </div>
@@ -252,10 +254,12 @@ export default function App() {
                   key={`${item.id}-${idx}`} 
                   className="bg-card w-32 shrink-0 rounded-[16px] shadow-sm overflow-hidden border border-gray-100"
                 >
-                  <div className="w-full h-20 bg-[#111111]" />
+                  <div className="w-full h-20 bg-[#111111] grain-bg flex items-center justify-center">
+                    <Utensils className="w-6 h-6 text-white/5" />
+                  </div>
                   <div className="p-3">
-                    <p className="text-xs text-textSub font-medium mb-0.5">{item.category}</p>
-                    <p className="font-bold text-[15px]">{item.name}</p>
+                    <p className="text-[10px] text-textSub font-bold uppercase tracking-wider mb-0.5">{item.category}</p>
+                    <p className="font-bold text-[14px] truncate">{item.name}</p>
                   </div>
                 </div>
               ))}
