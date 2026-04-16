@@ -180,44 +180,21 @@ export default function App() {
                 transition={{ type: "spring", stiffness: 300, damping: 25 }}
                 className="bg-card w-full rounded-[24px] premium-shadow overflow-hidden border border-gray-100"
               >
-                {result.image && (
-                  <div className="w-full h-48 overflow-hidden">
-                    <img
-                      src={result.image}
-                      alt={result.name}
-                      className="w-full h-full object-cover"
-                      onError={(e) => {
-                        e.target.style.display = 'none';
-                        e.target.parentElement.style.height = '0';
-                      }}
-                    />
-                  </div>
-                )}
                 <div className="p-8">
                   <div className="flex flex-col items-center text-center">
                     <div className="bg-primary/10 text-primary px-3.5 py-1 rounded-full text-xs font-bold mb-5 tracking-tight">
                       {result.category}
                     </div>
-                    <p className="text-textSub text-[15px] font-semibold mb-2">오늘 추천하는 레시피는</p>
-                    <h2 className="text-3xl font-extrabold tracking-tight text-textMain mb-4">{result.name}</h2>
-                    {result.calories > 0 && (
-                      <p className="text-xs text-textSub mb-6">{result.calories} kcal | {result.type}</p>
-                    )}
+                    <p className="text-textSub text-[15px] font-semibold mb-2">오늘 추천하는 메뉴는</p>
+                    <h2 className="text-3xl font-extrabold tracking-tight text-textMain mb-6">{result.name}</h2>
 
-                    <div className="grid grid-cols-2 gap-3 w-full">
+                    <div className="w-full">
                       <button
                         onClick={() => openMap(result.name)}
-                        className="bg-[#F2F4F6] hover:bg-gray-200 text-textMain font-bold py-4 rounded-2xl flex items-center justify-center transition-all active:scale-[0.98]"
+                        className="w-full bg-[#111111] hover:bg-black text-white font-bold py-4 rounded-2xl flex items-center justify-center transition-all active:scale-[0.98] premium-shadow"
                       >
                         <MapPin className="w-4 h-4 mr-2 text-primary" />
-                        식당찾기
-                      </button>
-                      <button
-                        onClick={() => window.open(`https://pantry-search.com/search?q=${result.name}`, '_blank')}
-                        className="bg-[#F2F4F6] hover:bg-gray-200 text-textMain font-bold py-4 rounded-2xl flex items-center justify-center transition-all active:scale-[0.98]"
-                      >
-                        <Utensils className="w-4 h-4 mr-2 text-primary" />
-                        레시피
+                        식당 시황 확인하기
                       </button>
                     </div>
                   </div>
@@ -261,7 +238,7 @@ export default function App() {
                   key={`${item.id}-${idx}`}
                   className="bg-card w-32 shrink-0 rounded-[16px] shadow-sm overflow-hidden border border-gray-100"
                 >
-                  <div className="w-full h-20 bg-[#111111]" />
+                  <div className="w-full h-1 bg-[#F2F4F6]" />
                   <div className="p-3">
                     <p className="text-xs text-textSub font-medium mb-0.5">{item.category}</p>
                     <p className="font-bold text-[15px]">{item.name}</p>
