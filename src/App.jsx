@@ -39,16 +39,22 @@ export default function App() {
         }
 
         const res = await fetch(url);
+        
+        // 응답이 성공적이지 않은 경우(예: 401 에러) 명시적으로 에러를 던져 catch 블록으로 보냅니다.
+        if (!res.ok) {
+          throw new Error(`Weather API Error: ${res.status}`);
+        }
+
         const data = await res.json();
 
         if (data.weather && data.weather[0]) {
           setWeather(data.weather[0].description);
-        } else if (data.main) {
+        } else {
           setWeather('맑음');
         }
       } catch (err) {
         console.error("Weather fetch failed:", err);
-        setWeather('맑음');
+        setWeather('맑음'); // 에러 발생 시 '맑음'으로 처리하여 무한 대기 방지
       }
     };
     fetchWeather();
