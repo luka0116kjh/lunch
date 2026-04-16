@@ -65,7 +65,8 @@ export default function App() {
 
     const fetchDust = async () => {
       try {
-        const url = `https://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty?serviceKey=${DUST_CONFIG.API_KEY}&returnType=json&numOfRows=100&pageNo=1&sidoName=서울&ver=1.0`;
+        const sido = encodeURIComponent('서울');
+        const url = `https://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty?serviceKey=${DUST_CONFIG.API_KEY}&returnType=json&numOfRows=100&pageNo=1&sidoName=${sido}&ver=1.0`;
         const res = await fetch(url);
         if (!res.ok) throw new Error('Dust API Error');
         const data = await res.json();

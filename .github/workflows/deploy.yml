@@ -29,6 +29,7 @@ jobs:
         env:
           VITE_WEATHER_API_KEY: ${{ secrets.VITE_WEATHER_API_KEY }}
           VITE_WEATHER_PROXY_URL: ${{ secrets.VITE_WEATHER_PROXY_URL }}
+          VITE_DUST_API_KEY: ${{ secrets.VITE_DUST_API_KEY }}
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4
