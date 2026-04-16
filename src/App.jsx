@@ -4,7 +4,7 @@ import { RefreshCw, MapPin, Clock, CloudSun, Utensils, History } from 'lucide-re
 import { getRecommendedRecipe } from './services/recipeService';
 
 const WEATHER_CONFIG = {
-  API_KEY: import.meta.env.VITE_WEATHER_API_KEY || "ba6125020fbb364bc884aab012f9763e",
+  API_KEY: import.meta.env.VITE_WEATHER_API_KEY,
   PROXY_URL: import.meta.env.VITE_WEATHER_PROXY_URL,
   LAT: 37.468795,
   LON: 127.040241,
