@@ -63,7 +63,10 @@
     --font-sans: "Pretendard Variable", Pretendard, system-ui, sans-serif;
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
       "Courier New", monospace;
+    --color-red-400: oklch(70.4% .191 22.216);
     --color-orange-400: oklch(75% .183 55.934);
+    --color-green-400: oklch(79.2% .209 151.711);
+    --color-blue-400: oklch(70.7% .165 254.624);
     --color-blue-600: oklch(54.6% .245 262.881);
     --color-gray-50: oklch(98.5% .002 247.839);
     --color-gray-100: oklch(96.7% .003 264.542);
@@ -403,6 +406,10 @@
     margin-top: calc(var(--spacing) * 10);
   }
 
+  .mr-1 {
+    margin-right: calc(var(--spacing) * 1);
+  }
+
   .mr-1\.5 {
     margin-right: calc(var(--spacing) * 1.5);
   }
@@ -455,6 +462,10 @@
     height: calc(var(--spacing) * 1);
   }
 
+  .h-1\.5 {
+    height: calc(var(--spacing) * 1.5);
+  }
+
   .h-3\.5 {
     height: calc(var(--spacing) * 3.5);
   }
@@ -481,6 +492,10 @@
 
   .min-h-screen {
     min-height: 100vh;
+  }
+
+  .w-1\.5 {
+    width: calc(var(--spacing) * 1.5);
   }
 
   .w-3\.5 {
@@ -627,8 +642,24 @@
     background-color: var(--color-background);
   }
 
+  .bg-blue-400 {
+    background-color: var(--color-blue-400);
+  }
+
   .bg-card {
     background-color: var(--color-card);
+  }
+
+  .bg-gray-300 {
+    background-color: var(--color-gray-300);
+  }
+
+  .bg-green-400 {
+    background-color: var(--color-green-400);
+  }
+
+  .bg-orange-400 {
+    background-color: var(--color-orange-400);
   }
 
   .bg-primary {
@@ -643,6 +674,10 @@
     .bg-primary\/10 {
       background-color: color-mix(in oklab, var(--color-primary) 10%, transparent);
     }
+  }
+
+  .bg-red-400 {
+    background-color: var(--color-red-400);
   }
 
   .bg-textMain {
@@ -1159,44 +1194,10 @@ body {
   }
 }
 /* 
-  App.css - Custom transition animations and utility classes
+  App.css - Custom utility classes
   Tailwind CSS v4 is used for most styling.
 */
 
-.glass-morphism {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
 .premium-shadow {
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.08);
-}
-
-.grain-bg {
-  position: relative;
-}
-
-.grain-bg::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  background-image: url("https://grainy-gradients.vercel.app/noise.svg");
-  filter: contrast(150%) brightness(1000%);
-  opacity: 0.05;
-  pointer-events: none;
-  z-index: 1;
-}
-
-@keyframes flash {
-  0% { opacity: 1; }
-  50% { opacity: 0.5; }
-  100% { opacity: 1; }
-}
-
-.animate-flash {
-  animation: flash 1.5s infinite;
 }
