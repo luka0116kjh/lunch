@@ -69,6 +69,7 @@
     --color-gray-100: oklch(96.7% .003 264.542);
     --color-gray-200: oklch(92.8% .006 264.531);
     --color-gray-300: oklch(87.2% .01 258.338);
+    --color-black: #000;
     --color-white: #fff;
     --spacing: .25rem;
     --container-md: 28rem;
@@ -362,10 +363,6 @@
     position: relative;
   }
 
-  .end {
-    inset-inline-end: var(--spacing);
-  }
-
   .right-0 {
     right: calc(var(--spacing) * 0);
   }
@@ -454,8 +451,8 @@
     display: flex;
   }
 
-  .grid {
-    display: grid;
+  .h-1 {
+    height: calc(var(--spacing) * 1);
   }
 
   .h-3\.5 {
@@ -474,24 +471,12 @@
     height: calc(var(--spacing) * 16);
   }
 
-  .h-20 {
-    height: calc(var(--spacing) * 20);
-  }
-
   .h-40 {
     height: calc(var(--spacing) * 40);
   }
 
-  .h-48 {
-    height: calc(var(--spacing) * 48);
-  }
-
   .h-64 {
     height: calc(var(--spacing) * 64);
-  }
-
-  .h-full {
-    height: 100%;
   }
 
   .min-h-screen {
@@ -546,10 +531,6 @@
     animation: var(--animate-pulse);
   }
 
-  .grid-cols-2 {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
   .flex-col {
     flex-direction: column;
   }
@@ -560,10 +541,6 @@
 
   .justify-center {
     justify-content: center;
-  }
-
-  .gap-3 {
-    gap: calc(var(--spacing) * 3);
   }
 
   :where(.space-y-2 > :not(:last-child)) {
@@ -699,10 +676,6 @@
   .to-transparent {
     --tw-gradient-to: transparent;
     --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
-  }
-
-  .object-cover {
-    object-fit: cover;
   }
 
   .p-3 {
@@ -907,16 +880,16 @@
   }
 
   @media (hover: hover) {
+    .hover\:bg-black:hover {
+      background-color: var(--color-black);
+    }
+
     .hover\:bg-blue-600:hover {
       background-color: var(--color-blue-600);
     }
 
     .hover\:bg-gray-100:hover {
       background-color: var(--color-gray-100);
-    }
-
-    .hover\:bg-gray-200:hover {
-      background-color: var(--color-gray-200);
     }
   }
 
