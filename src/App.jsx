@@ -95,8 +95,16 @@ export default function App() {
     fetchWeather();
     fetchDust();
 
-    const timer = setInterval(() => setCurrentTime(new Date()), 60000);
-    return () => clearInterval(timer);
+    const timeTimer = setInterval(() => setCurrentTime(new Date()), 60000);
+    const dataTimer = setInterval(() => {
+      fetchWeather();
+      fetchDust();
+    }, 30 * 60 * 1000); // 30 minutes
+
+    return () => {
+      clearInterval(timeTimer);
+      clearInterval(dataTimer);
+    };
   }, []); // Only on mount or when weather needs refresh
 
   const handleRecommend = async () => {
@@ -155,7 +163,7 @@ export default function App() {
                     dust.includes('나쁨') ? 'bg-orange-400' : 
                     dust.includes('매우나쁨') ? 'bg-red-400' : 'bg-gray-300'
                   }`} />
-                  <span className="text-[10px] text-textSub mr-1">미세</span>
+                  <span className="text-xs text-textSub mr-1">미세</span>
                   {dust}
                 </span>
               </div>
