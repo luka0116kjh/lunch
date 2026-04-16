@@ -1,6 +1,6 @@
-const API_KEY = import.meta.env.VITE_RECIPE_API_KEY || "adb9e4ca0f9e498e8238"; // Fallback to provided key if secret is missing
+const API_KEY = import.meta.env.VITE_RECIPE_API_KEY || "adb9e4ca0f9e498e8238";
 const BASE_URL = `https://openapi.foodsafetykorea.go.kr/api/${API_KEY}/COOKRCP01/json`;
-const PROXY_URL = "https://api.allorigins.win/raw?url=";
+const PROXY_URL = "https://corsproxy.io/?";
 
 /**
  * Category mapping for better matching
@@ -22,7 +22,6 @@ const CATEGORY_MAP = {
 export const fetchRecipes = async (start = 1, end = 100) => {
   try {
     const targetUrl = `${BASE_URL}/${start}/${end}`;
-    // Directly wrapping with proxy to ensure no direct CORS hit
     const response = await fetch(`${PROXY_URL}${encodeURIComponent(targetUrl)}`);
     const data = await response.json();
     
