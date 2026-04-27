@@ -131,7 +131,8 @@ export default function App() {
   };
 
   const openMap = (menuName) => {
-    window.open(`https://map.naver.com/v5/search/${menuName} 맛집`, '_blank');
+    const query = encodeURIComponent(`${menuName} 맛집`);
+    window.open(`https://map.naver.com/v5/search/${query}`, '_blank', 'noopener,noreferrer');
   };
 
   return (
@@ -158,11 +159,11 @@ export default function App() {
                   {weather}
                 </span>
                 <span className="flex items-center bg-white premium-shadow px-2.5 py-1 rounded-full border border-gray-50 ml-1.5">
-                  <div className={`w-1.5 h-1.5 rounded-full mr-1.5 ${
-                    dust.includes('좋음') ? 'bg-blue-400' : 
-                    dust.includes('보통') ? 'bg-green-400' : 
-                    dust.includes('나쁨') ? 'bg-orange-400' : 
-                    dust.includes('매우나쁨') ? 'bg-red-400' : 'bg-gray-300'
+                  <span className={`w-1.5 h-1.5 rounded-full mr-1.5 ${
+                    dust.includes('좋음') ? 'bg-blue-400' :
+                    dust.includes('보통') ? 'bg-green-400' :
+                    dust.includes('매우나쁨') ? 'bg-red-400' :
+                    dust.includes('나쁨') ? 'bg-orange-400' : 'bg-gray-300'
                   }`} />
                   <span className="text-[10px] text-textSub mr-1">미세</span>
                   {dust.split(' ')[0]}
@@ -255,7 +256,7 @@ export default function App() {
                         className="w-full bg-[#111111] hover:bg-black text-white text-sm font-bold py-3.5 rounded-2xl flex items-center justify-center transition-all active:scale-[0.98] premium-shadow"
                       >
                         <MapPin className="w-4 h-4 mr-2 text-primary" />
-                        식당 시황 확인하기
+                        맛집 검색하기
                       </button>
                     </div>
                   </div>

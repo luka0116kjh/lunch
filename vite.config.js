@@ -10,6 +10,6 @@ export default defineConfig({
   ],
   base: '/lunch/',
   build: {
-    cssMinify: false, // Potential fix for silent build failure on experimental Node versions
+    emptyOutDir: false,
   }
 })
