@@ -24,7 +24,8 @@ const MENU_DATA = {
     { id: 'kr22', name: '찜닭', category: '한식' },
     { id: 'kr23', name: '아구찜', category: '한식' },
     { id: 'kr24', name: '김치찜', category: '한식' },
-    { id: 'kr25', name: '해물파전', category: '한식' }
+    { id: 'kr25', name: '해물파전', category: '한식' },
+    { id: 'kr26', name: '편의점', category: '한식' }
   ],
   '일식': [
     { id: 'jp1', name: '돈카츠', category: '일식' },
